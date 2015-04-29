@@ -1,0 +1,112 @@
+{
+   "+grammar" : "pixel",
+   "+toprule" : "Expression",
+   "+version" : "0.0.1",
+   "ExcludeExpr" : {
+      ".all" : [
+         {
+            ".rgx" : "\\s*NOT\\s*\\(\\s*"
+         },
+         {
+            ".ref" : "PixelAndOrList"
+         },
+         {
+            ".rgx" : "\\s*\\)\\s*"
+         }
+      ]
+   },
+   "Expression" : {
+      ".any" : [
+         {
+            ".ref" : "IncludeExcludeExpr"
+         },
+         {
+            ".ref" : "IncludeExpr"
+         },
+         {
+            ".ref" : "ExcludeExpr"
+         }
+      ]
+   },
+   "IncludeExcludeExpr" : {
+      ".all" : [
+         {
+            ".ref" : "IncludeExpr"
+         },
+         {
+            ".rgx" : "\\s*AND\\s+"
+         },
+         {
+            ".ref" : "ExcludeExpr"
+         }
+      ]
+   },
+   "IncludeExpr" : {
+      ".all" : [
+         {
+            ".rgx" : "\\s*\\(\\s*"
+         },
+         {
+            ".ref" : "PixelAndOrList"
+         },
+         {
+            ".rgx" : "\\s*\\)\\s*"
+         }
+      ]
+   },
+   "MoreAndPixels" : {
+      ".all" : [
+         {
+            ".rgx" : "\\s*AND\\s*"
+         },
+         {
+            ".ref" : "PixelId"
+         }
+      ]
+   },
+   "MoreOrPixels" : {
+      ".all" : [
+         {
+            ".rgx" : "\\s*OR\\s*"
+         },
+         {
+            ".ref" : "PixelId"
+         }
+      ]
+   },
+   "PixelAndList" : {
+      ".all" : [
+         {
+            ".rgx" : "\\[([0-9]+)\\s*(?:\\@([0-9]+)m)?\\s*(?:\\#([0-9]+))?\\]\\s*"
+         },
+         {
+            "+min" : 1,
+            ".ref" : "MoreAndPixels"
+         }
+      ]
+   },
+   "PixelAndOrList" : {
+      ".any" : [
+         {
+            ".ref" : "PixelAndList"
+         },
+         {
+            ".ref" : "PixelOrList"
+         }
+      ]
+   },
+   "PixelId" : {
+      ".rgx" : "\\[([0-9]+)\\s*(?:\\@([0-9]+)m)?\\s*(?:\\#([0-9]+))?\\]"
+   },
+   "PixelOrList" : {
+      ".all" : [
+         {
+            ".rgx" : "\\[([0-9]+)\\s*(?:\\@([0-9]+)m)?\\s*(?:\\#([0-9]+))?\\]\\s*"
+         },
+         {
+            "+min" : 0,
+            ".ref" : "MoreOrPixels"
+         }
+      ]
+   }
+}
