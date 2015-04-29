@@ -1,0 +1,56 @@
+%grammar pixel
+%version 0.0.1
+
+Expression:
+  | IncludeExcludeExpr
+  | IncludeExpr
+  | ExcludeExpr
+
+IncludeExcludeExpr:
+  IncludeExpr
+  /- 'AND' +/
+  ExcludeExpr
+
+IncludeExpr:
+  /- '(' -/
+  PixelAndOrList
+  /- ')' -/
+
+ExcludeExpr:
+  /- 'NOT' - '(' -/
+  PixelAndOrList
+  /- ')' -/
+
+PixelAndOrList:
+  | PixelAndList
+  | PixelOrList
+
+PixelAndList:
+  / PixelId -/
+  MoreAndPixels+
+
+PixelOrList:
+  / PixelId -/
+  MoreOrPixels*
+
+MoreAndPixels:
+  /- 'AND' -/
+  PixelId
+
+MoreOrPixels:
+  /- 'OR' -/
+  PixelId
+
+PixelId: /
+  '['
+    ( DIGIT+ ) -
+    RecencyQualifier? -
+    FrequencyQualifier?
+  ']'
+/
+
+RecencyQualifier:
+  / (: '@' ( DIGIT+ ) 'm' ) /
+
+FrequencyQualifier:
+  / (: '#' ( DIGIT+ ) ) /
